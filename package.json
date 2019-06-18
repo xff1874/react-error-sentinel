@@ -1,0 +1,16 @@
+{
+    "name": "react-error-sentinel",
+    "version": "1.0.0",
+    "description": "react error sentinel is a cli which patch react error boundaries lifecycle easily",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@g.hz.netease.com:22222/NeteaseMusicUI/react-error-sentinel.git"
+    },
+    "author": "zwd",
+    "keywords": ["react", "error boundaries", "cli"],
+    "license": "ISC"
+}
