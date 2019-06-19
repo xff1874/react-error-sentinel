@@ -9,38 +9,22 @@ const shell = require('shelljs');
 
 
 program.version(packageJson.version);
-program
-    .command('init')
-    .alias("i")
-    .description('init .rescliconfig file')
-    .action(function() {
-        const filePath = '.rescliconfig';
-        shell.touch(filePath);
-        console.log(chalk.green(`${filePath} created`))
-    });
+program.option('-m, --mode [mode]', 'csr or ssr','csr')
+  .option('-d, --dir [dir]', 'where source code store',"src")
+  .option('-f, --force [force]', 'force update if already patched',true)
+  .action(function(ops){
+      console.log(chalk.blue(`mode option is  ${ops.mode} ,dir option is ${ops.dir}, force option is ${ops.force}`))
+  })
 
-program
-    .command('pcsr [isforceupdate]')
-    .alias("c")
-    .description('patch code to react component')
-    .action(function(options){
-        console.log(chalk.green(`start to handler pcsr command and the isforceupdate is ${options}`))
-     })
 
-program
-    .command('pssr [isforceupdate]')
-    .alias("s")
-    .description('patch code to react component')
-    .action(function(options){
-        console.log(options)
-    })
+
 
 program.on("--help",function(){
-    console.log(` -----------description---------------
-This cli will use getDerivedStateFromError() and componentDidCatch when you input pcsr command
-As those react lifecycle functions doesn't support server sider rendering, I will use try/catch to wrap the render function
-So, If you don't know which command to use,just use the type pssr
-    `)
+    console.log(chalk.green(`-----------description---------------
+This cli will use getDerivedStateFromError() and componentDidCatch when you choose csr command
+However, those react lifecycle functions doesn't support server sider rendering,So I will use try/catch to wrap the render function
+As a result, If you don't know which command to use,just use the type ssr mode
+    `))
 })
 
 program.parse(process.argv);
