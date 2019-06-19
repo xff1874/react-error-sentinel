@@ -20,6 +20,10 @@
     "dependencies": {
         "chalk": "^2.4.2",
         "commander": "^2.20.0",
+        "compare-versions": "^3.4.0",
+        "fs-extra": "^8.0.1",
+        "react": "16.8.6",
+        "semver": "^6.1.1",
         "shelljs": "^0.8.3"
     },
     "devDependencies": {

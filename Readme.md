@@ -1,26 +1,28 @@
 ### 介绍
-React Error Sentinel是一款脚手架
-主要利用react error boundaries两个函数
-static getDerivedStateFromError() 和 componentDidCatch()自动补丁，避免页面渲染某个组件出错整个页面crash的情况。
 
+React Error Sentinel 是一款脚手架
+主要利用 react error boundaries 两个函数
+static getDerivedStateFromError() 和 componentDidCatch()自动补丁，避免页面渲染某个组件出错整个页面 crash 的情况。
 
 ### 存在的问题
+
 1. Event handlers (learn more)
 2. Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
 3. Server side rendering
 4. Errors thrown in the error boundary itself (rather than its children)
 
-主要是3服务端渲染无法catch，还有自己本身无法catch.对于服务端渲染只能用try/catch了。这也是降级方案。
+主要是 3 服务端渲染无法 catch，还有自己本身无法 catch.对于服务端渲染只能用 try/catch 了。这也是降级方案。
 
 ### 使用说明
 
-1. 创建.rescliconfig配置文件
+1. 创建.rescliconfig 配置文件
 
 ```js
-touch .rescliconfig
+touch.rescliconfig;
 ```
 
 2. 配置.rescliconfig
+
 ```
 {
     sentinel:{
@@ -34,11 +36,11 @@ touch .rescliconfig
 
 3. 使用命令
 
-``` shell
+```shell
 rescli -mode ssr -dir src -force true
 ```
-命令的具体信息查看 rescli -h
 
+命令的具体信息查看 rescli -h
 
 4. todo
 
@@ -51,7 +53,7 @@ rescli -mode ssr -dir src -force true
             imports:["import sentry from sentry","import log from 'log'","import myerrorcomponent from '$component/myerrorcomponent'"],
             componentDidCatch:[" sentry.send(error,info)"],
             errorComponent:myerrorcomponent,
-            target:"src/paging/index.js"
+            target:["src/paging/index.js"]
 
         },
          {
