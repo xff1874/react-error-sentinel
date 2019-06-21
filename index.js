@@ -8,19 +8,22 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const path = require('path');
 const semver = require('semver');
+const readdir = require('readdir');
 
 program.version(packageJson.version);
 program
     .option('-m, --mode [mode]', 'csr or ssr', 'csr')
     .option('-d, --dir [dir]', 'where source code store', 'src')
     .option('-f, --force [force]', 'force update if already patched', true)
-    .action((ops) => {
+    .action(ops => {
         console.log(
             chalk.blue(
                 `mode option is  ${ops.mode} ,dir option is ${ops.dir}, force option is ${ops.force}`
             )
         );
-        checkProjectReactVersion();
+        if (checkProjectReactVersion()) {
+            readAllFilesRecurisve(ops.dir);
+        }
     });
 
 program.on('--help', () => {
@@ -62,4 +65,15 @@ function checkProjectReactVersion() {
         return false;
     }
     console.log(chalk.blue('react version check finished'));
+    return true;
+}
+
+function readAllFilesRecurisve(dir) {
+    const dirPath = path.resolve(dir);
+    let filesArray = readdir.readSync(
+        dirPath,
+        ['**.js', '**.jsx'],
+        readdir.ABSOLUTE_PATHS
+    );
+    console.log(filesArray);
 }

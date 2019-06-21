@@ -23,6 +23,7 @@
         "compare-versions": "^3.4.0",
         "fs-extra": "^8.0.1",
         "react": "16.8.6",
+        "readdir": "^0.1.0",
         "semver": "^6.1.1",
         "shelljs": "^0.8.3"
     },
