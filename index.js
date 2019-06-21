@@ -9,6 +9,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const semver = require('semver');
 const readdir = require('readdir');
+let babel = require('@babel/core');
 
 program.version(packageJson.version);
 program
@@ -75,5 +76,32 @@ function readAllFilesRecurisve(dir) {
         ['**.js', '**.jsx'],
         readdir.ABSOLUTE_PATHS
     );
-    console.log(filesArray);
+    filesArray.map(item => {
+        startToParseReactFile(item);
+    });
+    // console.log(filesArray);
+}
+
+function startToParseReactFile(file) {
+    let fileContent = fs.readFileSync(file, 'utf8');
+    // babel.transform
+    if (isReactComponent(fileContent)) {
+        parse(fileContent);
+    } else {
+        console.log(chalk.yellow(`${file} is not react component.`));
+    }
+}
+
+function isReactComponent(file) {
+    const re = /import\s*react/gi;
+    return re.test(file);
+}
+
+function parse(content) {
+    const babelplugins = ['@babel/plugin-proposal-class-properties'];
+    const re = babel.transformSync(content, {
+        plugins: babelplugins,
+        presets: ['@babel/preset-react'],
+    });
+    console.log(re);
 }
