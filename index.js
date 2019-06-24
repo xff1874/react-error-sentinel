@@ -86,7 +86,7 @@ function startToParseReactFile(file) {
     let fileContent = fs.readFileSync(file, 'utf8');
     // babel.transform
     if (isReactComponent(fileContent)) {
-        parse(fileContent);
+        transform(fileContent);
     } else {
         console.log(chalk.yellow(`${file} is not react component.`));
     }
@@ -97,11 +97,20 @@ function isReactComponent(file) {
     return re.test(file);
 }
 
-function parse(content) {
-    const babelplugins = ['@babel/plugin-proposal-class-properties'];
+function transform(content) {
+    const MyVisitor = {
+        visitor: {
+            Identifier(path) {
+                console.log(`Visiting: ${path.node.name}`);
+            },
+        },
+    };
+    const babelplugins = ['@babel/plugin-proposal-class-properties', MyVisitor];
+    // eslint-disable-next-line max-len
+    /** transform is more andvance than parse. transform include ast which parser only emit,source code ,file info and generator info */
     const re = babel.transformSync(content, {
         plugins: babelplugins,
         presets: ['@babel/preset-react'],
     });
-    console.log(re);
+    // console.log(re);
 }
