@@ -11,9 +11,11 @@ const semver = require('semver');
 const readdir = require('readdir');
 let babel = require('@babel/core');
 
+let resconfigFile;
+
 program.version(packageJson.version);
 program.option('-p, --patch', 'start to run the cli').action(() => {
-    const resconfigFile = readRootFile('.resrc.json');
+    resconfigFile = readRootFile('.resrc.json');
     if (!resconfigFile) {
         return;
     }
