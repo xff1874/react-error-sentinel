@@ -10,6 +10,7 @@ const path = require('path');
 const semver = require('semver');
 const readdir = require('readdir');
 let babel = require('@babel/core');
+const template = require('@babel/template');
 
 let resconfigFile;
 
