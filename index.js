@@ -17,6 +17,7 @@ program.option('-p, --patch', 'start to run the cli').action(() => {
     if (!resconfigFile) {
         return;
     }
+    console.log(resconfigFile);
 
     if (checkProjectReactVersion()) {
         readAllFilesRecurisve(resconfigFile.sourceDir);
@@ -103,7 +104,7 @@ function transform(content) {
     const MyVisitor = {
         visitor: {
             Identifier(path) {
-                console.log(`Visiting: ${path.node.name}`);
+                // console.log(`Visiting: ${path.node.name}`);
             },
         },
     };
