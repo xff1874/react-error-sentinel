@@ -13,13 +13,13 @@ let babel = require('@babel/core');
 
 program.version(packageJson.version);
 program.option('-p, --patch', 'start to run the cli').action(() => {
-    const resconfigFile = readRootFile('.resrc');
+    const resconfigFile = readRootFile('.resrc.json');
     if (!resconfigFile) {
         return;
     }
 
     if (checkProjectReactVersion()) {
-        readAllFilesRecurisve();
+        readAllFilesRecurisve(resconfigFile.sourceDir);
     }
 });
 
