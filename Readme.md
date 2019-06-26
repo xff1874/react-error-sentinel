@@ -15,13 +15,13 @@ static getDerivedStateFromError() 和 componentDidCatch()自动补丁，避免�
 
 ### 使用说明
 
-1. 创建.rescliconfig 配置文件
+1. 创建.resrc 配置文件
 
 ```js
-touch.rescliconfig;
+touch.resrc;
 ```
 
-2. 配置.rescliconfig
+2. 配置.resrc
 
 ```
 {
@@ -29,7 +29,9 @@ touch.rescliconfig;
         imports:["import sentry from sentry","import log from 'log'","import myerrorcomponent from '$component/myerrorcomponent'"],
         componentDidCatch:[" sentry.send(error,info)"],
         errorComponent:myerrorcomponent,
-    }
+    },
+    mode:csr,
+    sourceDir:"src"
 }
 
 ```
@@ -37,7 +39,7 @@ touch.rescliconfig;
 3. 使用命令
 
 ```shell
-rescli -mode ssr -dir src -force true
+rescli --patch
 ```
 
 命令的具体信息查看 rescli -h

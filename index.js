@@ -12,20 +12,16 @@ const readdir = require('readdir');
 let babel = require('@babel/core');
 
 program.version(packageJson.version);
-program
-    .option('-m, --mode [mode]', 'csr or ssr', 'csr')
-    .option('-d, --dir [dir]', 'where source code store', 'src')
-    .option('-f, --force [force]', 'force update if already patched', true)
-    .action(ops => {
-        console.log(
-            chalk.blue(
-                `mode option is  ${ops.mode} ,dir option is ${ops.dir}, force option is ${ops.force}`
-            )
-        );
-        if (checkProjectReactVersion()) {
-            readAllFilesRecurisve(ops.dir);
-        }
-    });
+program.option('-p, --patch', 'start to run the cli').action(() => {
+    const resconfigFile = readRootFile('.resrc');
+    if (!resconfigFile) {
+        return;
+    }
+
+    if (checkProjectReactVersion()) {
+        readAllFilesRecurisve();
+    }
+});
 
 program.on('--help', () => {
     console.log(
@@ -39,16 +35,22 @@ As a result, If you don't know which command to use,just use the type ssr mode
 
 program.parse(process.argv);
 
-function checkProjectReactVersion() {
-    const rootPackageJson = path.resolve(__dirname, 'package.json');
-    const obj = fs.readJSONSync(rootPackageJson, { throws: false });
+function readRootFile(fileName) {
+    const rootJsonFilfe = path.resolve(__dirname, fileName);
+    const obj = fs.readJSONSync(rootJsonFilfe, { throws: false });
     if (!obj) {
         console.log(
-            chalk.red(
-                `no such file ${rootPackageJson},please check your project`
-            )
+            chalk.red(`no such file ${rootJsonFilfe},please check your project`)
         );
-        return false;
+        return;
+    }
+    return obj;
+}
+
+function checkProjectReactVersion() {
+    const obj = readRootFile('package.json');
+    if (!obj) {
+        return;
     }
 
     const reactVersion = obj.dependencies.react;
