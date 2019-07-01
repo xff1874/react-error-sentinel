@@ -9,11 +9,12 @@ const fs = require('fs-extra');
 const path = require('path');
 const semver = require('semver');
 const readdir = require('readdir');
-let babel = require('@babel/core');
+const babel = require('@babel/core');
 const template = require('@babel/template');
 const traverse = require('@babel/traverse');
 const generator = require('@babel/generator');
 const prettier = require('prettier');
+const t = require('@babel/types');
 
 let resconfigFile;
 
@@ -23,7 +24,7 @@ program.option('-p, --patch', 'start to run the cli').action(() => {
     if (!resconfigFile) {
         return;
     }
-    console.log(resconfigFile);
+    // console.log(resconfigFile);
 
     if (checkProjectReactVersion()) {
         readAllFilesRecurisve(resconfigFile.sourceDir);
@@ -108,13 +109,47 @@ function isReactComponent(file) {
 
 function transform(content, originFile) {
     const convertVisitor = {
-        Identifier(path) {
-            // console.log(`Visiting: ${path.node.name}`);
+        ClassMethod(path) {
+            // if(path.node.key.name =="render"){
+            //     let returnStmNode = path.node.body.body[0];
+            //     let returnStm = path.get("ReturnStatement");
+            //     if(returnStm){
+            //         let oldJsx = returnStmNode.argument;
+            //         let openingElement =  t.JSXOpeningElement(t.JSXIdentifier('DashboardItem'),[]);
+            //         let closingElement =  t.JSXClosingElement(t.JSXIdentifier('DashboardItem'));
+            //         let jsxChildren = [oldJsx];
+            //         let newJsx=  t.JSXElement(openingElement, closingElement, jsxChildren)
+            //         let newReturnStm = t.returnStatement(newJsx)
+            //         path.get("body").pushContainer("body",newReturnStm);
+            //     }
+            // }
+        },
+        ReturnStatement(path) {
+            const id = path.scope.generateUidIdentifierBasedOnNode(
+                path.node.id
+            );
+
+            let oldJsx = path.node.argument;
+            let openingElement = t.JSXOpeningElement(
+                t.JSXIdentifier('DashboardItem'),
+                []
+            );
+            let closingElement = t.JSXClosingElement(
+                t.JSXIdentifier('DashboardItem')
+            );
+            let jsxChildren = [oldJsx];
+            let newJsx = t.JSXElement(
+                openingElement,
+                closingElement,
+                jsxChildren
+            );
+            let newReturnStm = t.returnStatement(newJsx);
+
+            path.remove();
+            path.parent.body.push(newReturnStm);
         },
     };
     const babelplugins = ['@babel/plugin-proposal-class-properties'];
-    // eslint-disable-next-line max-len
-    /** transform is more andvance than parse. transform include ast which parser only emit,source code ,file info and generator info */
     const ast = babel.parse(content, {
         plugins: babelplugins,
         presets: ['@babel/preset-react'],
@@ -122,11 +157,13 @@ function transform(content, originFile) {
 
     traverse.default(ast, convertVisitor);
 
-    let newContent = generator.default(ast).code;
+    let newCode = generator.default(ast).code;
 
-    const prettifiedCode = prettier.format(newContent, { parser: 'babel' });
-
-    fs.writeFile(originFile, prettifiedCode, err => {
-        if (err) throw new Error(`${originFile} write error: ${err}`);
-    });
+    // const prettifiedCode = prettier.format(newCode, { parser: 'babel' });
+    // return;
+    if (newCode) {
+        fs.writeFile(originFile, newCode, err => {
+            if (err) throw new Error(`${originFile} write error: ${err}`);
+        });
+    }
 }
