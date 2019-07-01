@@ -11,6 +11,9 @@ const semver = require('semver');
 const readdir = require('readdir');
 let babel = require('@babel/core');
 const template = require('@babel/template');
+const traverse = require('@babel/traverse');
+const generator = require('@babel/generator');
+const prettier = require('prettier');
 
 let resconfigFile;
 
@@ -92,7 +95,7 @@ function startToParseReactFile(file) {
     let fileContent = fs.readFileSync(file, 'utf8');
     // babel.transform
     if (isReactComponent(fileContent)) {
-        transform(fileContent);
+        transform(fileContent, file);
     } else {
         console.log(chalk.yellow(`${file} is not react component.`));
     }
@@ -103,20 +106,27 @@ function isReactComponent(file) {
     return re.test(file);
 }
 
-function transform(content) {
-    const MyVisitor = {
-        visitor: {
-            Identifier(path) {
-                // console.log(`Visiting: ${path.node.name}`);
-            },
+function transform(content, originFile) {
+    const convertVisitor = {
+        Identifier(path) {
+            // console.log(`Visiting: ${path.node.name}`);
         },
     };
-    const babelplugins = ['@babel/plugin-proposal-class-properties', MyVisitor];
+    const babelplugins = ['@babel/plugin-proposal-class-properties'];
     // eslint-disable-next-line max-len
     /** transform is more andvance than parse. transform include ast which parser only emit,source code ,file info and generator info */
-    const re = babel.transformSync(content, {
+    const ast = babel.parse(content, {
         plugins: babelplugins,
         presets: ['@babel/preset-react'],
     });
-    // console.log(re);
+
+    traverse.default(ast, convertVisitor);
+
+    let newContent = generator.default(ast).code;
+
+    const prettifiedCode = prettier.format(newContent, { parser: 'babel' });
+
+    fs.writeFile(originFile, prettifiedCode, err => {
+        if (err) throw new Error(`${originFile} write error: ${err}`);
+    });
 }
