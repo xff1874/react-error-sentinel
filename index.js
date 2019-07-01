@@ -159,10 +159,10 @@ function transform(content, originFile) {
 
     let newCode = generator.default(ast).code;
 
-    // const prettifiedCode = prettier.format(newCode, { parser: 'babel' });
+    const prettifiedCode = prettier.format(newCode, { parser: 'babel' });
     // return;
     if (newCode) {
-        fs.writeFile(originFile, newCode, err => {
+        fs.writeFile(originFile, prettifiedCode, err => {
             if (err) throw new Error(`${originFile} write error: ${err}`);
         });
     }
