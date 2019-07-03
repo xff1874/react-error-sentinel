@@ -109,21 +109,6 @@ function isReactComponent(file) {
 
 function transform(content, originFile) {
     const convertVisitor = {
-        ClassMethod(path) {
-            // if(path.node.key.name =="render"){
-            //     let returnStmNode = path.node.body.body[0];
-            //     let returnStm = path.get("ReturnStatement");
-            //     if(returnStm){
-            //         let oldJsx = returnStmNode.argument;
-            //         let openingElement =  t.JSXOpeningElement(t.JSXIdentifier('DashboardItem'),[]);
-            //         let closingElement =  t.JSXClosingElement(t.JSXIdentifier('DashboardItem'));
-            //         let jsxChildren = [oldJsx];
-            //         let newJsx=  t.JSXElement(openingElement, closingElement, jsxChildren)
-            //         let newReturnStm = t.returnStatement(newJsx)
-            //         path.get("body").pushContainer("body",newReturnStm);
-            //     }
-            // }
-        },
         ReturnStatement(path) {
             const id = path.scope.generateUidIdentifierBasedOnNode(
                 path.node.id
@@ -131,11 +116,11 @@ function transform(content, originFile) {
 
             let oldJsx = path.node.argument;
             let openingElement = t.JSXOpeningElement(
-                t.JSXIdentifier('DashboardItem'),
+                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
                 []
             );
             let closingElement = t.JSXClosingElement(
-                t.JSXIdentifier('DashboardItem')
+                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
             );
             let jsxChildren = [oldJsx];
             let newJsx = t.JSXElement(
