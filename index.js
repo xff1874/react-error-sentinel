@@ -109,10 +109,20 @@ function isReactComponent(file) {
 
 function transform(content, originFile) {
     const convertVisitor = {
+        Program(path) {
+            resconfigFile.sentinel.imports.forEach(stm => {
+                const impstm = template.default.ast(stm);
+                path.node.body.unshift(impstm);
+            });
+
+            // path.parent.pus
+            // let _body =  path.get("body");
+            // _body.unshift(importDeclaration)
+        },
         ReturnStatement(path) {
-            const id = path.scope.generateUidIdentifierBasedOnNode(
-                path.node.id
-            );
+            // const id = path.scope.generateUidIdentifierBasedOnNode(
+            //     path.node.id
+            // );
 
             let oldJsx = path.node.argument;
             let openingElement = t.JSXOpeningElement(
