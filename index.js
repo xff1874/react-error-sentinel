@@ -112,6 +112,7 @@ function transform(content, originFile) {
         Program(path) {
             resconfigFile.sentinel.imports.forEach(stm => {
                 const impstm = template.default.ast(stm);
+                t.addComment(impstm, 'trailing', 'isresptach', true);
                 path.node.body.unshift(impstm);
             });
 
