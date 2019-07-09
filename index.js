@@ -17,6 +17,7 @@ const prettier = require('prettier');
 const t = require('@babel/types');
 
 let resconfigFile;
+const resPatchFlag = 'resptach';
 
 program.version(packageJson.version);
 program.option('-p, --patch', 'start to run the cli').action(() => {
@@ -112,7 +113,7 @@ function transform(content, originFile) {
         Program(path) {
             resconfigFile.sentinel.imports.forEach(stm => {
                 const impstm = template.default.ast(stm);
-                t.addComment(impstm, 'trailing', 'isresptach', true);
+                t.addComment(impstm, 'trailing', resPatchFlag, true);
                 path.node.body.unshift(impstm);
             });
 
@@ -125,11 +126,13 @@ function transform(content, originFile) {
             //     path.node.id
             // );
 
+            let patchFlag = t.JSXIdentifier(resPatchFlag);
             let oldJsx = path.node.argument;
             let openingElement = t.JSXOpeningElement(
                 t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
                 []
             );
+            openingElement.attributes.push(patchFlag);
             let closingElement = t.JSXClosingElement(
                 t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
             );
