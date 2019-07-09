@@ -4,7 +4,9 @@
             "import log from \"log\"",
             "import MyErrorHandleComponent from \"$component/MyErrorHandleComponent\""
         ],
-        "errorHandleComponent": "MyErrorHandleComponent"
+        "errorHandleComponent": "MyErrorHandleComponent",
+        "log": "log",
+        "filter": ["test", "ig"]
     },
     "mode": "csr",
     "sourceDir": "src"
