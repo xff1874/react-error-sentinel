@@ -8,7 +8,9 @@ export function serverRender(context) {
         const staticMarkup = renderToStaticMarkup(element);
         return <div dangerouslySetInnerHTML={{ __html: staticMarkup }} />;
     } catch (e) {
-        return context.props.fallBack(e);
+        console.log('服务端报错,catch');
+        // return context.props.fallback(e);
+        return '服务端报错';
     }
 }
 

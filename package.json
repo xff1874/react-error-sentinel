@@ -4,7 +4,10 @@
     "description": "react error sentinel is a cli which patch react error boundaries lifecycle easily",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "build:dll": "webpack --progress --color --config dev/config/webpack.dll.config.js",
+        "build:client": "node dev/scripts/client-build.js",
+        "build:server": "node dev/scripts/server-build.js",
+        "start": "npx babel-node dev/src/server/index.js"
     },
     "repository": {
         "type": "git",
@@ -18,11 +21,14 @@
     "author": "zwd",
     "license": "ISC",
     "dependencies": {
+        "@babel/template": "^7.4.4",
+        "@babel/types": "^7.4.4",
         "chalk": "^2.4.2",
         "commander": "^2.20.0",
         "compare-versions": "^3.4.0",
         "fs-extra": "^8.0.1",
         "react": "16.8.6",
+        "react-dom": "^16.8.6",
         "readdir": "^0.1.0",
         "semver": "^6.1.1",
         "shelljs": "^0.8.3"
@@ -30,21 +36,31 @@
     "devDependencies": {
         "@babel/cli": "^7.4.4",
         "@babel/core": "^7.4.5",
+        "@babel/node": "^7.4.5",
         "@babel/plugin-proposal-class-properties": "^7.4.4",
         "@babel/plugin-transform-arrow-functions": "^7.2.0",
         "@babel/preset-react": "^7.0.0",
-        "@babel/template": "^7.4.4",
         "@commitlint/cli": "^8.0.0",
         "@commitlint/config-conventional": "^8.0.0",
         "@music/eslint-config-bass": "^1.4.4",
         "babel-eslint": "^10.0.2",
+        "babel-loader": "^8.0.6",
+        "babel-preset-react-app": "^9.0.0",
+        "css-loader": "^3.0.0",
         "eslint": "^5.16.0",
         "eslint-config-prettier": "^5.0.0",
         "eslint-plugin-import": "^2.17.3",
         "eslint-plugin-react": "^7.13.0",
+        "express": "^4.17.1",
+        "file-loader": "^4.0.0",
         "husky": "^2.4.1",
+        "less-loader": "^5.0.0",
         "lint-staged": "^8.2.1",
-        "prettier": "1.18.2"
+        "prettier": "^1.18.2",
+        "style-loader": "^0.23.1",
+        "url-loader": "^2.0.0",
+        "webpack": "^4.35.0",
+        "webpack-cli": "^3.3.5"
     },
     "husky": {
         "hooks": {

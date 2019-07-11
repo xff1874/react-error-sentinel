@@ -1,13 +1,12 @@
 {
     "sentinel": {
         "imports": [
-            "import log from \"log\"",
             "import MyErrorHandleComponent from \"$component/MyErrorHandleComponent\""
         ],
         "errorHandleComponent": "MyErrorHandleComponent",
         "log": "log",
-        "filter": ["test", "ig"]
+        "filter": ["^((?!boundary).)*$", "ig"]
     },
     "mode": "csr",
-    "sourceDir": "src"
+    "sourceDir": "dev/src"
 }
