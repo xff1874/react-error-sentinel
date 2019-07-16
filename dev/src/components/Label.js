@@ -1,24 +1,16 @@
 import MyErrorHandleComponent from '$component/MyErrorHandleComponent';
 import React, { Component } from 'react';
 
-class Label extends Component {
-    constructor() {
-        super();
-        this.handleClick = this.handleClick.bind(this);
-    }
-
+export default class Label extends Component {
     handleClick() {
-        console.log('label clicked');
+        console.log('lable clicked');
     }
 
     render() {
-        const { label = 'default label' } = this.props;
         return (
-            <MyErrorHandleComponent>
-                {<label onClick={this.handleClick}>{label}</label>}
+            <MyErrorHandleComponent fallback={this.fallback}>
+                {<div onClick={this.handleClick}>label</div>}
             </MyErrorHandleComponent>
         );
     }
 }
-
-export default Label;

@@ -1,19 +1,16 @@
 import MyErrorHandleComponent from '$component/MyErrorHandleComponent';
 import React, { Component } from 'react';
 
-class ClientError extends Component {
+export default class ErrorComponet extends Component {
     render() {
         return (
-            <MyErrorHandleComponent>
-                {<h3>ClientErrorComponent</h3>}
+            <MyErrorHandleComponent fallback={this.fallback}>
+                {<div>ErrorComponet</div>}
             </MyErrorHandleComponent>
         );
     }
 
     componentDidMount() {
-        // const Mount = null;
-        // console.log(Mount.test);
+        let a = [][0].a;
     }
 }
-
-export default ClientError;

@@ -5,9 +5,13 @@ import React, { Component } from 'react';
 import ClientError from './ErrorComponet';
 
 class ClientErrorContainer extends Component {
+    fallback() {
+        return <h1>自定义客户端报错信息</h1>;
+    }
+
     render() {
         return (
-            <MyErrorHandleComponent>
+            <MyErrorHandleComponent fallback={this.fallback}>
                 {
                     <div>
                         <ClientError />
@@ -30,7 +34,7 @@ class Box extends Component {
 
     render() {
         return (
-            <MyErrorHandleComponent>
+            <MyErrorHandleComponent fallback={this.fallback}>
                 {
                     <div>
                         <h1 onClick={this.handleClick}>BOX</h1>

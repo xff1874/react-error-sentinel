@@ -1,3 +1,4 @@
+/* eslint-disable */
 import MyErrorHandleComponent from '$component/MyErrorHandleComponent';
 import React, { Component } from 'react';
 
@@ -11,34 +12,31 @@ class ServerSideErrorComponent extends Component {
         console.log('btn clicked');
     }
 
+    fallback() {
+        return <h1>自定义服务端报错错误信息</h1>;
+    }
+
     render() {
         const { btnLabel } = this.props;
-        const arr = [];
-        console.log(arr[0].a);
         return (
-            <MyErrorHandleComponent>
-                <button onClick={this.handleClick}>{btnLabel}</button>
+            <MyErrorHandleComponent fallback={this.fallback}>
+                {<Button btnLabel={btnLabel} />}
             </MyErrorHandleComponent>
         );
     }
 }
 
-const Safe = props => {
-    return (
-        <MyErrorHandleComponent>
-            <ServerSideErrorComponent {...props} />
-        </MyErrorHandleComponent>
-    );
-};
+class Button extends Component {
+    render() {
+        const { btnLabel } = this.props;
+        const arr = [];
+        console.log(arr[0].a);
+        return (
+            <MyErrorHandleComponent fallback={this.fallback}>
+                {<button> {btnLabel}</button>}
+            </MyErrorHandleComponent>
+        );
+    }
+}
 
-// class ServerError extends Component {
-//     render() {
-//         return (
-//             <MyErrorHandleComponent>
-//                 {<h1>{props.btnLabel}</h1>}
-//             </MyErrorHandleComponent>
-//         );
-//     }
-// }
-
-export default Safe;
+export default ServerSideErrorComponent;

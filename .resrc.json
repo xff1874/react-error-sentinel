@@ -5,7 +5,8 @@
         ],
         "errorHandleComponent": "MyErrorHandleComponent",
         "log": "log",
-        "filter": ["^((?!boundary).)*$", "ig"]
+        "filter": ["/components/ig", "/test/ig"],
+        "fallbackFuncName": "fallback"
     },
     "mode": "csr",
     "sourceDir": "dev/src"

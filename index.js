@@ -87,16 +87,20 @@ function readAllFilesRecurisve(dir) {
         ['**.js', '**.jsx'],
         readdir.ABSOLUTE_PATHS
     );
-    filesArray.map(item => {
-        startToParseReactFile(item);
-    });
-    // console.log(filesArray);
+    filesArray.map(startToParseReactFile);
+}
+
+function isReactComponent(file) {
+    const re = /import\s*react/gi;
+    return re.test(file);
 }
 
 function startToParseReactFile(file) {
-    const [pattern, flags] = resconfigFile.sentinel.filter;
-    const filterReg = new RegExp(pattern, flags);
-    if (!filterReg.test(file)) {
+    // 检索符合过滤条件的文件
+    const filters = resconfigFile.sentinel.filter;
+    const filtersReg = filters.map(convertStrToReg);
+
+    if (!filtersReg.some(reg => reg.test(file))) {
         return;
     }
 
@@ -107,11 +111,6 @@ function startToParseReactFile(file) {
     } else {
         console.log(chalk.yellow(`${file} is not react component.`));
     }
-}
-
-function isReactComponent(file) {
-    const re = /import\s*react/gi;
-    return re.test(file);
 }
 
 function transform(content, originFile) {
@@ -128,9 +127,21 @@ function transform(content, originFile) {
                 return;
             }
 
+            // 添加组件自定义的回退方案
+            let fallbackAttrExpression = t.jsxExpressionContainer(
+                t.memberExpression(
+                    t.identifier('this'),
+                    t.identifier(resconfigFile.sentinel.fallbackFuncName)
+                )
+            );
+            let fallbackAttr = t.jsxAttribute(
+                t.jsxIdentifier('fallback'),
+                fallbackAttrExpression
+            );
+
             let openingElement = t.JSXOpeningElement(
                 t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
-                []
+                [fallbackAttr]
             );
             let closingElement = t.JSXClosingElement(
                 t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
@@ -217,6 +228,18 @@ function transform(content, originFile) {
         fs.writeFile(originFile, prettifiedCode, err => {
             if (err) throw new Error(`${originFile} write error: ${err}`);
         });
+    }
+}
+
+function convertStrToReg(str) {
+    try {
+        const match = str.match(new RegExp('^/(.*?)/([gimy]*)$'));
+        if (match) {
+            const regex = new RegExp(match[1], match[2]);
+            return regex;
+        }
+    } catch (error) {
+        chalk.red(`${str} is not a stringify regexp`);
     }
 }
 
