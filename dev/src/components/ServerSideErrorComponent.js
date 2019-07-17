@@ -1,5 +1,6 @@
+import MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX from '$component/MyErrorHandleComponentBBBBBBBB';
+
 /* eslint-disable */
-import MyErrorHandleComponent from '$component/MyErrorHandleComponent';
 import React, { Component } from 'react';
 
 class ServerSideErrorComponent extends Component {
@@ -19,9 +20,12 @@ class ServerSideErrorComponent extends Component {
     render() {
         const { btnLabel } = this.props;
         return (
-            <MyErrorHandleComponent fallback={this.fallback}>
+            <MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX
+                fallback={this.fallback}
+                isReactErrorSentinel
+            >
                 {<Button btnLabel={btnLabel} />}
-            </MyErrorHandleComponent>
+            </MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX>
         );
     }
 }
@@ -32,9 +36,12 @@ class Button extends Component {
         const arr = [];
         console.log(arr[0].a);
         return (
-            <MyErrorHandleComponent fallback={this.fallback}>
+            <MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX
+                fallback={this.fallback}
+                isReactErrorSentinel
+            >
                 {<button> {btnLabel}</button>}
-            </MyErrorHandleComponent>
+            </MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX>
         );
     }
 }

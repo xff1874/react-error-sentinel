@@ -1,16 +1,15 @@
-import MyErrorHandleComponent from '$component/MyErrorHandleComponent';
+import MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX from '$component/MyErrorHandleComponentBBBBBBBB';
 import React, { Component } from 'react';
 
 export default class ErrorComponet extends Component {
     render() {
         return (
-            <MyErrorHandleComponent fallback={this.fallback}>
-                {<div>ErrorComponet</div>}
-            </MyErrorHandleComponent>
+            <MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX
+                fallback={this.fallback}
+                isReactErrorSentinel
+            >
+                {<div>dasdasd</div>}
+            </MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX>
         );
-    }
-
-    componentDidMount() {
-        let a = [][0].a;
     }
 }

@@ -1,9 +1,9 @@
 {
     "sentinel": {
         "imports": [
-            "import MyErrorHandleComponent from \"$component/MyErrorHandleComponent\""
+            "import MyErrorHandleComponentBBBBBBBB from \"$component/MyErrorHandleComponentBBBBBBBB\""
         ],
-        "errorHandleComponent": "MyErrorHandleComponent",
+        "errorHandleComponent": "MyErrorHandleComponentBBBBBBBB",
         "log": "log",
         "filter": ["/components/ig", "/test/ig"],
         "fallbackFuncName": "fallback"

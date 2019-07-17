@@ -18,6 +18,7 @@ const t = require('@babel/types');
 
 let resconfigFile;
 let hasImport = false;
+const specialFlag = 'XXSpecialFlagXX';
 
 program.version(packageJson.version);
 program.option('-p, --patch', 'start to run the cli').action(() => {
@@ -114,18 +115,66 @@ function startToParseReactFile(file) {
 }
 
 function transform(content, originFile) {
-    const returnStatementVisitor = {
+    const convertVisitor = {
+        Program: {
+            enter() {
+                hasImport = false;
+            },
+
+            exit(path, state) {
+                // if (!hasImport) {
+                resconfigFile.sentinel.imports.forEach(stm => {
+                    const impstm = template.default.ast(
+                        stm.replace(
+                            resconfigFile.sentinel.errorHandleComponent,
+                            resconfigFile.sentinel.errorHandleComponent +
+                                specialFlag
+                        )
+                    );
+                    path.node.body.unshift(impstm);
+                });
+                // }
+            },
+        },
+        ImportDeclaration(path, state) {
+            const findErrorHandleComponent = ({ local }) => /XXSpecialFlagXX/.test(local.name);
+            const importArr = path.node.specifiers.some(
+                findErrorHandleComponent
+            );
+            if (importArr) {
+                // hasImport = true;
+                path.remove();
+            }
+        },
         ReturnStatement(path) {
+            // 校验是否是render函数中的return statement
+            const parentFunc = path.getFunctionParent();
+            if (parentFunc.node.key.name !== 'render') {
+                return;
+            }
+
             let oldJsx = path.node.argument;
 
             // 判断已经包裹的不要再次包裹
-            if (
-                oldJsx.type === 'JSXElement' &&
-                oldJsx.openingElement.name.name ===
-                    resconfigFile.sentinel.errorHandleComponent
-            ) {
-                return;
+            if (oldJsx.type === 'JSXElement') {
+                const oldJsxAttrs = oldJsx.openingElement.attributes;
+                const isReactErrorSentinel = oldJsxAttrs.some(
+                    x => x.name.name === 'isReactErrorSentinel'
+                );
+                if (isReactErrorSentinel) {
+                    oldJsx.openingElement.name = t.jsxIdentifier(
+                        resconfigFile.sentinel.errorHandleComponent +
+                            specialFlag
+                    );
+                    oldJsx.closingElement.name = t.jsxIdentifier(
+                        resconfigFile.sentinel.errorHandleComponent +
+                            specialFlag
+                    );
+                    return;
+                }
             }
+
+            // 再加工component的名称，用来作区分
 
             // 添加组件自定义的回退方案
             let fallbackAttrExpression = t.jsxExpressionContainer(
@@ -139,12 +188,20 @@ function transform(content, originFile) {
                 fallbackAttrExpression
             );
 
+            let isReactErrorSentinelAttr = t.jsxAttribute(
+                t.jsxIdentifier('isReactErrorSentinel')
+            );
+
             let openingElement = t.JSXOpeningElement(
-                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
-                [fallbackAttr]
+                t.JSXIdentifier(
+                    resconfigFile.sentinel.errorHandleComponent + specialFlag
+                ),
+                [fallbackAttr, isReactErrorSentinelAttr]
             );
             let closingElement = t.JSXClosingElement(
-                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
+                t.JSXIdentifier(
+                    resconfigFile.sentinel.errorHandleComponent + specialFlag
+                )
             );
             let jsxChildren;
             if (oldJsx.type === 'ArrayExpression') {
@@ -157,6 +214,7 @@ function transform(content, originFile) {
                 // return `sdasd ${new Date().getDay()}`;
                 jsxChildren = [t.jsxExpressionContainer(oldJsx)];
             } else {
+                console.log(originFile);
                 jsxChildren = [t.jsxExpressionContainer(oldJsx)];
             }
 
@@ -169,47 +227,6 @@ function transform(content, originFile) {
 
             path.remove();
             path.parent.body.push(newReturnStm);
-        },
-    };
-
-    const classBodyVisitor = {
-        ClassMethod(path) {
-            const methodName = path.node.key.name;
-            if (methodName === 'render') {
-                path.traverse(returnStatementVisitor);
-            }
-        },
-    };
-
-    const convertVisitor = {
-        Program: {
-            enter() {
-                hasImport = false;
-            },
-
-            exit(path, state) {
-                if (!hasImport) {
-                    resconfigFile.sentinel.imports.forEach(stm => {
-                        const impstm = template.default.ast(stm);
-                        path.node.body.unshift(impstm);
-                    });
-                }
-            },
-        },
-        ImportDeclaration(path, state) {
-            const findErrorHandleComponent = ({ local }) => local.name === resconfigFile.sentinel.errorHandleComponent;
-            const importArr = path.node.specifiers.filter(
-                findErrorHandleComponent
-            );
-            if (importArr.length > 0) {
-                hasImport = true;
-            }
-        },
-        'ClassDeclaration|ClassExpression': function(path, state) {
-            if (!isReactComponentClass(t, path.node)) {
-                return;
-            }
-            path.traverse(classBodyVisitor);
         },
     };
     const babelplugins = ['@babel/plugin-proposal-class-properties'];

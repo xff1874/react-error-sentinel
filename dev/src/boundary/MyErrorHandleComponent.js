@@ -20,7 +20,6 @@ export function serverMarkup(context) {
 export function is_server() {
     return !(typeof window !== 'undefined' && window.document);
 }
-const serverRender = is_server() && serverMarkup;
 
 class ErrorBoundary extends Component {
     constructor() {
@@ -41,8 +40,8 @@ class ErrorBoundary extends Component {
     }
 
     render() {
-        if (serverRender) {
-            return serverRender(this);
+        if (is_server()) {
+            return serverMarkup(this);
         }
 
         if (this.state.hasError) {

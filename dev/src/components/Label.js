@@ -1,4 +1,4 @@
-import MyErrorHandleComponent from '$component/MyErrorHandleComponent';
+import MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX from '$component/MyErrorHandleComponentBBBBBBBB';
 import React, { Component } from 'react';
 
 export default class Label extends Component {
@@ -8,9 +8,12 @@ export default class Label extends Component {
 
     render() {
         return (
-            <MyErrorHandleComponent fallback={this.fallback}>
+            <MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX
+                fallback={this.fallback}
+                isReactErrorSentinel
+            >
                 {<div onClick={this.handleClick}>label</div>}
-            </MyErrorHandleComponent>
+            </MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX>
         );
     }
 }
