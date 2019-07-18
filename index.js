@@ -134,8 +134,8 @@ function transform(content, originFile) {
             const { leadingComments = [] } = path.node;
             const findErrorHandleComponent = comment => comment.type === 'CommentLine' &&
                 new RegExp(commentContent).test(comment.value);
-            const importArr = leadingComments.some(findErrorHandleComponent);
-            if (importArr) {
+            const hasImport = leadingComments.some(findErrorHandleComponent);
+            if (hasImport) {
                 t.removeComments(path.node);
                 path.remove();
             }
