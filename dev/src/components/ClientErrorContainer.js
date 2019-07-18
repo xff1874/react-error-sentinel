@@ -1,15 +1,17 @@
-import MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX from '$component/MyErrorHandleComponentBBBBBBBB';
+// isReactErrorSentinel
+import MyErrorHandleComponentBBBBBBBB from '$component/MyErrorHandleComponentBBBBBBBB';
+// dasdasdasd
 import React, { Component } from 'react';
 
 export default class ClientErrorContainer extends Component {
     render() {
         return (
-            <MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX
+            <MyErrorHandleComponentBBBBBBBB
                 fallback={this.fallback}
                 isReactErrorSentinel
             >
                 {<div>ClientErrorContainer</div>}
-            </MyErrorHandleComponentBBBBBBBBXXSpecialFlagXX>
+            </MyErrorHandleComponentBBBBBBBB>
         );
     }
 }

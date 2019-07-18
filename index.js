@@ -18,7 +18,8 @@ const t = require('@babel/types');
 
 let resconfigFile;
 let hasImport = false;
-const specialFlag = 'XXSpecialFlagXX';
+const specialFlag = '';
+const commentContent = 'isReactErrorSentinel';
 
 program.version(packageJson.version);
 program.option('-p, --patch', 'start to run the cli').action(() => {
@@ -122,27 +123,20 @@ function transform(content, originFile) {
             },
 
             exit(path, state) {
-                // if (!hasImport) {
                 resconfigFile.sentinel.imports.forEach(stm => {
-                    const impstm = template.default.ast(
-                        stm.replace(
-                            resconfigFile.sentinel.errorHandleComponent,
-                            resconfigFile.sentinel.errorHandleComponent +
-                                specialFlag
-                        )
-                    );
+                    const impstm = template.default.ast(stm);
+                    t.addComment(impstm, 'leading', commentContent, true);
                     path.node.body.unshift(impstm);
                 });
-                // }
             },
         },
         ImportDeclaration(path, state) {
-            const findErrorHandleComponent = ({ local }) => /XXSpecialFlagXX/.test(local.name);
-            const importArr = path.node.specifiers.some(
-                findErrorHandleComponent
-            );
+            const { leadingComments = [] } = path.node;
+            const findErrorHandleComponent = comment => comment.type === 'CommentLine' &&
+                new RegExp(commentContent).test(comment.value);
+            const importArr = leadingComments.some(findErrorHandleComponent);
             if (importArr) {
-                // hasImport = true;
+                t.removeComments(path.node);
                 path.remove();
             }
         },
