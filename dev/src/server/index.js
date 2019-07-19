@@ -1,3 +1,5 @@
+// isReactErrorSentinel
+import ServerErrorBoundaryAAA from '$components/ServerErrorBoundary';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import express from 'express';
@@ -7,7 +9,6 @@ const app = express();
 app.use(express.static('dev/build'));
 app.get('/', (req, res) => {
     const htmlMarkUp = renderToString(<App />);
-
     res.send(`
         <!DOCTYPE html>
             <html>

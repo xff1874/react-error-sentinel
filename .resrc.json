@@ -1,11 +1,11 @@
 {
     "sentinel": {
         "imports": [
-            "import MyErrorHandleComponentBBBBBBBB from \"$component/MyErrorHandleComponentBBBBBBBB\""
+            "import ServerErrorBoundaryAAA from \"$components/ServerErrorBoundary\""
         ],
-        "errorHandleComponent": "MyErrorHandleComponentBBBBBBBB",
+        "errorHandleComponent": "ServerErrorBoundaryAAA",
         "log": "log",
-        "filter": ["/components/ig", "/test/ig"],
+        "filter": ["/^((?!ServerErrorBoundary).)*$/"],
         "fallbackFuncName": "fallback"
     },
     "mode": "csr",

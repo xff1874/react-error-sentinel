@@ -1,5 +1,5 @@
 // isReactErrorSentinel
-import MyErrorHandleComponentBBBBBBBB from '$component/MyErrorHandleComponentBBBBBBBB';
+import ServerErrorBoundaryAAA from '$components/ServerErrorBoundary';
 
 /* eslint-disable */
 import React, { Component } from 'react';
@@ -8,6 +8,7 @@ class ServerSideErrorComponent extends Component {
     constructor() {
         super();
         this.handleClick = this.handleClick.bind(this);
+        this.renderItems = this.renderItems.bind(this);
     }
 
     handleClick() {
@@ -18,15 +19,23 @@ class ServerSideErrorComponent extends Component {
         return <h1>自定义服务端报错错误信息</h1>;
     }
 
+    renderItems() {
+        return [1, 2, 3].map(item => <h1>{item}</h1>);
+    }
+
+    renderTest() {
+        return <h1>renderTest</h1>;
+    }
+
     render() {
         const { btnLabel } = this.props;
         return (
-            <MyErrorHandleComponentBBBBBBBB
-                fallback={this.fallback}
+            <ServerErrorBoundaryAAA
                 isReactErrorSentinel
+                fallback={this.fallback}
             >
                 {<Button btnLabel={btnLabel} />}
-            </MyErrorHandleComponentBBBBBBBB>
+            </ServerErrorBoundaryAAA>
         );
     }
 }
@@ -37,12 +46,12 @@ class Button extends Component {
         const arr = [];
         console.log(arr[0].a);
         return (
-            <MyErrorHandleComponentBBBBBBBB
+            <ServerErrorBoundaryAAA
                 fallback={this.fallback}
                 isReactErrorSentinel
             >
                 {<button> {btnLabel}</button>}
-            </MyErrorHandleComponentBBBBBBBB>
+            </ServerErrorBoundaryAAA>
         );
     }
 }

@@ -7,7 +7,7 @@
         ["module-resolver", {
             "root": ["./"],
             "alias": {
-                "$component": "./dev/src/boundary",
+                "$components": "./dev/src/components",
             }
         }],
     ]

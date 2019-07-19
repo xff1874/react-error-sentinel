@@ -23,7 +23,7 @@ module.exports = {
         extensions: ['.js', '.json'],
         modules: ['node_modules', paths.src],
         alias: {
-            $component: path.resolve(__dirname, '../src/boundary'),
+            $components: path.resolve(__dirname, '../src/components'),
         },
     },
     module: {

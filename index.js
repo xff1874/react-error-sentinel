@@ -17,8 +17,7 @@ const prettier = require('prettier');
 const t = require('@babel/types');
 
 let resconfigFile;
-let hasImport = false;
-const specialFlag = '';
+const JSXAttrFlag = 'isReactErrorSentinel';
 const commentContent = 'isReactErrorSentinel';
 
 program.version(packageJson.version);
@@ -118,11 +117,7 @@ function startToParseReactFile(file) {
 function transform(content, originFile) {
     const convertVisitor = {
         Program: {
-            enter() {
-                hasImport = false;
-            },
-
-            exit(path, state) {
+            exit(path) {
                 resconfigFile.sentinel.imports.forEach(stm => {
                     const impstm = template.default.ast(stm);
                     t.addComment(impstm, 'leading', commentContent, true);
@@ -132,8 +127,10 @@ function transform(content, originFile) {
         },
         ImportDeclaration(path, state) {
             const { leadingComments = [] } = path.node;
+            const commentReg = new RegExp(commentContent);
             const findErrorHandleComponent = comment => comment.type === 'CommentLine' &&
-                new RegExp(commentContent).test(comment.value);
+                commentReg.test(comment.value);
+
             const hasImport = leadingComments.some(findErrorHandleComponent);
             if (hasImport) {
                 t.removeComments(path.node);
@@ -141,36 +138,31 @@ function transform(content, originFile) {
             }
         },
         ReturnStatement(path) {
-            // 校验是否是render函数中的return statement
             const parentFunc = path.getFunctionParent();
-            if (parentFunc.node.key.name !== 'render') {
+            if (!parentFunc.node.key || parentFunc.node.key.name !== 'render') {
                 return;
             }
 
             let oldJsx = path.node.argument;
+            if (!oldJsx) return;
 
-            // 判断已经包裹的不要再次包裹
             if (oldJsx.type === 'JSXElement') {
                 const oldJsxAttrs = oldJsx.openingElement.attributes;
                 const isReactErrorSentinel = oldJsxAttrs.some(
-                    x => x.name.name === 'isReactErrorSentinel'
+                    x => x.name && x.name.name === JSXAttrFlag
                 );
+
                 if (isReactErrorSentinel) {
                     oldJsx.openingElement.name = t.jsxIdentifier(
-                        resconfigFile.sentinel.errorHandleComponent +
-                            specialFlag
+                        resconfigFile.sentinel.errorHandleComponent
                     );
                     oldJsx.closingElement.name = t.jsxIdentifier(
-                        resconfigFile.sentinel.errorHandleComponent +
-                            specialFlag
+                        resconfigFile.sentinel.errorHandleComponent
                     );
                     return;
                 }
             }
 
-            // 再加工component的名称，用来作区分
-
-            // 添加组件自定义的回退方案
             let fallbackAttrExpression = t.jsxExpressionContainer(
                 t.memberExpression(
                     t.identifier('this'),
@@ -183,32 +175,22 @@ function transform(content, originFile) {
             );
 
             let isReactErrorSentinelAttr = t.jsxAttribute(
-                t.jsxIdentifier('isReactErrorSentinel')
+                t.jsxIdentifier(JSXAttrFlag)
             );
 
             let openingElement = t.JSXOpeningElement(
-                t.JSXIdentifier(
-                    resconfigFile.sentinel.errorHandleComponent + specialFlag
-                ),
-                [fallbackAttr, isReactErrorSentinelAttr]
+                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
+                [isReactErrorSentinelAttr, fallbackAttr]
             );
             let closingElement = t.JSXClosingElement(
-                t.JSXIdentifier(
-                    resconfigFile.sentinel.errorHandleComponent + specialFlag
-                )
+                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
             );
             let jsxChildren;
             if (oldJsx.type === 'ArrayExpression') {
-                // return [<p>test1</p>, <h1>test2</h1>];
                 jsxChildren = oldJsx.elements;
             } else if (oldJsx.type === 'StringLiteral') {
-                // return 'sdasd';(也可以直接直接return,字符串毕竟不会报错)
                 jsxChildren = [t.jsxText(oldJsx.value)];
-            } else if (oldJsx.type === 'TemplateLiteral') {
-                // return `sdasd ${new Date().getDay()}`;
-                jsxChildren = [t.jsxExpressionContainer(oldJsx)];
             } else {
-                console.log(originFile);
                 jsxChildren = [t.jsxExpressionContainer(oldJsx)];
             }
 
@@ -220,10 +202,15 @@ function transform(content, originFile) {
             let newReturnStm = t.returnStatement(newJsx);
 
             path.remove();
-            path.parent.body.push(newReturnStm);
+            if (path.parent.body) {
+                path.parent.body.push(newReturnStm);
+            }
         },
     };
-    const babelplugins = ['@babel/plugin-proposal-class-properties'];
+    const babelplugins = [
+        '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-syntax-dynamic-import',
+    ];
     const ast = babel.parse(content, {
         plugins: babelplugins,
         presets: ['@babel/preset-react'],
@@ -252,30 +239,4 @@ function convertStrToReg(str) {
     } catch (error) {
         chalk.red(`${str} is not a stringify regexp`);
     }
-}
-
-function isReactComponentClass(types, node) {
-    const { superClass } = node;
-    // class Btn extends Component
-    const isComponent = types.isIdentifier(superClass, { name: 'Component' });
-    // class Btn extends PureComponent
-    const isPureComponent = types.isIdentifier(superClass, {
-        name: 'PureComponent',
-    });
-    // class Btn extends React.xxx/成员变量
-    const isMemberExpression = types.isMemberExpression(superClass);
-    // class Btn extends React.Component
-    const isReactDotComponent =
-        types.isIdentifier(superClass.object, { name: 'React' }) &&
-        types.isIdentifier(superClass.property, { name: 'Component' });
-    // class Btn extends React.PureComponent
-    const isReactDotPureComponent =
-        types.isIdentifier(superClass.object, { name: 'React' }) &&
-        types.isIdentifier(superClass.property, { name: 'PureComponent' });
-
-    return (
-        isComponent ||
-        isPureComponent ||
-        (isMemberExpression && (isReactDotComponent || isReactDotPureComponent))
-    );
 }
