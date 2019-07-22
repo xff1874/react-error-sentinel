@@ -237,6 +237,6 @@ function convertStrToReg(str) {
             return regex;
         }
     } catch (error) {
-        chalk.red(`${str} is not a stringify regexp`);
+        chalk.red(`${str} is an invalid stringify regexp`);
     }
 }

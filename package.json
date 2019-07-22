@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "react error sentinel is a cli which patch react error boundaries lifecycle easily",
     "main": "index.js",
+    "bin": {
+        "res": "./src/res.js"
+    },
     "scripts": {
         "build:dll": "webpack --progress --color --config dev/config/webpack.dll.config.js",
         "build:client": "node dev/scripts/client-build.js",
@@ -24,6 +27,8 @@
         "@babel/template": "^7.4.4",
         "@babel/types": "^7.4.4",
         "chalk": "^2.4.2",
+        "co": "^4.6.0",
+        "co-prompt": "^1.0.0",
         "commander": "^2.20.0",
         "compare-versions": "^3.4.0",
         "fs-extra": "^8.0.1",
@@ -31,7 +36,8 @@
         "react-dom": "^16.8.6",
         "readdir": "^0.1.0",
         "semver": "^6.1.1",
-        "shelljs": "^0.8.3"
+        "shelljs": "^0.8.3",
+        "yargs": "^13.3.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.4",
