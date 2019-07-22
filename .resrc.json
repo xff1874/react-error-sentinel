@@ -1,13 +1,13 @@
 {
     "sentinel": {
         "imports": [
-            "import ServerErrorBoundaryAAA from \"$components/ServerErrorBoundary\""
+            "import ServerErrorBoundary from '$components/ServerErrorBoundary'"
         ],
-        "errorHandleComponent": "ServerErrorBoundaryAAA",
+        "errorHandleComponent": "ServerErrorBoundary",
         "log": "log",
-        "filter": ["/^((?!ServerErrorBoundary).)*$/"],
+        "filter": ["/dasd/ig"],
         "fallbackFuncName": "fallback"
     },
-    "mode": "csr",
-    "sourceDir": "dev/src"
+    "mode": "ssr",
+    "sourceDir": "./dev/src/test"
 }
