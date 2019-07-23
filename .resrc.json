@@ -1,11 +1,9 @@
 {
     "sentinel": {
-        "imports": [
-            "import ServerErrorBoundary from '$components/ServerErrorBoundary'"
-        ],
+        "imports": "import ServerErrorBoundary from '$components/ServerErrorBoundary'",
         "errorHandleComponent": "ServerErrorBoundary",
         "log": "log",
-        "filter": ["/dasd/ig"],
+        "filter": ["/test/ig"],
         "fallbackFuncName": "fallback"
     },
     "mode": "ssr",

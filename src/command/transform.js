@@ -69,7 +69,6 @@ function checkProjectReactVersion() {
 
 function readAllFilesRecurisve(dir) {
     const dirPath = path.resolve(process.cwd(), dir);
-    console.log(dirPath);
     const filesArray = readdir.readSync(
         dirPath,
         ['**.js', '**.jsx'],
@@ -105,11 +104,10 @@ function transform(content, originFile) {
     const convertVisitor = {
         Program: {
             exit(path) {
-                resconfigFile.sentinel.imports.forEach(stm => {
-                    const impstm = template.default.ast(stm);
-                    t.addComment(impstm, 'leading', RES_Attr_Flag, true);
-                    path.node.body.unshift(impstm);
-                });
+                const stm = resconfigFile.sentinel.imports;
+                const impstm = template.default.ast(stm);
+                t.addComment(impstm, 'leading', RES_Attr_Flag, true);
+                path.node.body.unshift(impstm);
             },
         },
         ImportDeclaration(path, state) {
