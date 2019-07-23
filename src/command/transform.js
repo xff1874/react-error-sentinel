@@ -82,12 +82,6 @@ function startToParseReactFile(file) {
     const filters = resconfigFile.sentinel.filter;
     const filtersReg = filters.map(utils.convertStrToReg);
     if (!filtersReg.some(reg => reg.test(file))) {
-        utils.log(
-            'yellow',
-            `\n ⚠️ prompt : no file matched,check your ${chalk.bold(
-                '.resrc.json fliter'
-            )} property`
-        );
         return;
     }
 
