@@ -1,14 +1,9 @@
 #! /usr/bin/env node
 
 const program = require('commander');
-const co = require('co');
-const prompt = require('co-prompt');
-const inquirer = require('inquirer');
 const chalk = require('chalk');
-const fs = require('fs-extra');
 
 const packageJSON = require('../package');
-const utils = require('./utils');
 const init = require('./command/init');
 const transform = require('./command/transform');
 
@@ -22,13 +17,15 @@ As a result, If you don't know which command to use,just use the type ssr mode
 
 program
     .command('init')
-    .description('generate react-error-sentinel templates')
+    .description('generate catch-react-error templates')
     .alias('i')
     .action(init);
 
 program
     .command('transform')
-    .description('transform your source code wrapped with ErrorBoundary')
+    .description(
+        'transform your source code wrapped with ErrorBoundary Component'
+    )
     .alias('t')
     .action(transform);
 

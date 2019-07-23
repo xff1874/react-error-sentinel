@@ -7,9 +7,9 @@ const utils = require('../utils');
 const tempFolder = path.resolve(__dirname, '../templates');
 
 module.exports = function() {
-    utils.log('green', '\n start init react-error-sentinel templates');
+    utils.log('green', '\n start init catch-react-error templates');
     co(function* () {
-        const selectRenderMode = () => inquirer.prompt([
+        const userInput = () => inquirer.prompt([
             {
                 type: 'list',
                 name: 'mode',
@@ -37,7 +37,7 @@ module.exports = function() {
                 message:
                         'Please input the folder name where you want to save the template ErrorBoundary Component',
                 default() {
-                    return 'res-temp-component';
+                    return 'temp-catch-component';
                 },
             },
         ]);
@@ -103,7 +103,7 @@ module.exports = function() {
             processExit,
             copyErrorComponent,
             copyResrc,
-            selectRenderMode
+            userInput
         )();
     });
 };

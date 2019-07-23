@@ -1,10 +1,10 @@
 {
-    "name": "@music/react-error-sentinel",
-    "version": "0.1.0",
-    "description": "react error sentinel is a cli which patch react error boundaries lifecycle easily",
+    "name": "@music/catch-react-error",
+    "version": "0.1.1",
+    "description": "catch-react-error is a cli which patch react error boundaries lifecycle easily",
     "main": "index.js",
     "bin": {
-        "res": "./src/res.js"
+        "catch-react-error": "./src/catch-react-error.js"
     },
     "scripts": {
         "build:dll": "webpack --progress --color --config dev/config/webpack.dll.config.js",
