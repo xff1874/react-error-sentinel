@@ -7,10 +7,10 @@
         "catch-react-error": "./src/catch-react-error.js"
     },
     "scripts": {
-        "build:dll": "webpack --progress --color --config dev/config/webpack.dll.config.js",
-        "build:client": "node dev/scripts/client-build.js",
-        "build:server": "node dev/scripts/server-build.js",
-        "start": "npx babel-node dev/src/server/index.js"
+        "build:dll": "webpack --progress --color --config example/config/webpack.dll.config.js",
+        "build:client": "node example/scripts/client-build.js",
+        "build:server": "node example/scripts/server-build.js",
+        "start": "npx babel-node example/src/server/index.js"
     },
     "repository": {
         "type": "git",
