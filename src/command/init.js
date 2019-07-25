@@ -18,6 +18,7 @@ module.exports = function() {
                     'csr (client side render)',
                     'ssr (server side render)',
                 ],
+                default: 'ssr (server side render)',
                 filter(val) {
                     return val.substring(0, 3);
                 },
@@ -37,14 +38,14 @@ module.exports = function() {
                 message:
                         'Please input the folder name where you want to save the template ErrorBoundary Component',
                 default() {
-                    return 'temp-catch-component';
+                    return 'catch-react-error-component';
                 },
             },
         ]);
 
         const copyResrc = inputs => {
             const readTempResrc = inputs => fs
-                .readJson(`${tempFolder}/resrc-template.json`)
+                .readJson(`${tempFolder}/.catch-react-error-config.json`)
                 .then(resrcObj => {
                     resrcObj.mode = inputs.mode;
                     resrcObj.sourceDir = inputs.sourceDir;
@@ -52,9 +53,13 @@ module.exports = function() {
                 });
 
             const writeResrc = ({ inputs, resrcObj }) => fs
-                .writeJson(`${process.cwd()}/.resrc.json`, resrcObj, {
-                    spaces: 4,
-                })
+                .writeJson(
+                    `${process.cwd()}/.catch-react-error-config.json`,
+                    resrcObj,
+                    {
+                        spaces: 4,
+                    }
+                )
                 .then(() => {
                     utils.log(
                         'green',

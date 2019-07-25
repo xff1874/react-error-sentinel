@@ -1,10 +1,15 @@
 {
     "name": "@music/catch-react-error",
-    "version": "0.1.3",
+    "version": "0.1.2",
     "description": "catch-react-error is a cli which patch react error boundaries lifecycle easily",
-    "main": "./src/catch-react-error.js",
+    "main": "index.js",
     "bin": {
         "catch-react-error": "./src/catch-react-error.js"
+    },
+    "scripts": {
+        "build:dll": "webpack --progress --color --config example/config/webpack.dll.config.js",
+        "build:client": "node example/scripts/client-build.js",
+        "start": "npx babel-node example/src/server/index.js"
     },
     "repository": {
         "type": "git",
@@ -46,13 +51,22 @@
         "@music/eslint-config-bass": "^1.4.4",
         "babel-eslint": "^10.0.2",
         "babel-loader": "^8.0.6",
+        "babel-preset-react-app": "^9.0.0",
+        "css-loader": "^3.0.0",
         "eslint": "^5.16.0",
         "eslint-config-prettier": "^5.0.0",
         "eslint-plugin-import": "^2.17.3",
         "eslint-plugin-react": "^7.13.0",
+        "express": "^4.17.1",
+        "file-loader": "^4.0.0",
         "husky": "^2.4.1",
+        "less-loader": "^5.0.0",
         "lint-staged": "^8.2.1",
-        "prettier": "^1.18.2"
+        "prettier": "^1.18.2",
+        "style-loader": "^0.23.1",
+        "url-loader": "^2.0.0",
+        "webpack": "^4.35.0",
+        "webpack-cli": "^3.3.5"
     },
     "husky": {
         "hooks": {

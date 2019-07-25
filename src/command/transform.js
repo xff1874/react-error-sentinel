@@ -142,24 +142,13 @@ function transform(content, originFile) {
                 }
             }
 
-            let fallbackAttrExpression = t.jsxExpressionContainer(
-                t.memberExpression(
-                    t.identifier('this'),
-                    t.identifier(resconfigFile.sentinel.fallbackFuncName)
-                )
-            );
-            let fallbackAttr = t.jsxAttribute(
-                t.jsxIdentifier('fallback'),
-                fallbackAttrExpression
-            );
-
             let isReactErrorSentinelAttr = t.jsxAttribute(
                 t.jsxIdentifier(RES_Attr_Flag)
             );
 
             let openingElement = t.JSXOpeningElement(
                 t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
-                [isReactErrorSentinelAttr, fallbackAttr]
+                [isReactErrorSentinelAttr]
             );
             let closingElement = t.JSXClosingElement(
                 t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
@@ -209,7 +198,7 @@ function transform(content, originFile) {
 }
 
 module.exports = function() {
-    resconfigFile = readRootFile('.resrc.json');
+    resconfigFile = readRootFile('.catch-react-error-config.json');
     if (!resconfigFile) {
         return;
     }
