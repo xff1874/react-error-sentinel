@@ -1,6 +1,6 @@
 {
     "name": "@music/catch-react-error",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "catch-react-error is a cli which patch react error boundaries lifecycle easily",
     "main": "./src/catch-react-error.js",
     "bin": {
@@ -40,6 +40,7 @@
         "@babel/node": "^7.4.5",
         "@babel/plugin-proposal-class-properties": "^7.4.4",
         "@babel/plugin-transform-arrow-functions": "^7.2.0",
+        "@babel/plugin-syntax-dynamic-import": "@7.2.0",
         "@babel/preset-react": "^7.0.0",
         "@commitlint/cli": "^8.0.0",
         "@commitlint/config-conventional": "^8.0.0",
