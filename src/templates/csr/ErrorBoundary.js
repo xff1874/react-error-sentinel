@@ -20,14 +20,11 @@ class ErrorBoundary extends Component {
 
     render() {
         if (this.state.hasError) {
-            return this.props.fallback();
+            return <div>loading</div>;
         }
 
         return this.props.children;
     }
 }
 
-ErrorBoundary.defaultProps = {
-    fallback: () => <h1>请联系客服</h1>,
-};
 export default ErrorBoundary;

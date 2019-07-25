@@ -14,7 +14,7 @@ export function serverMarkup(context) {
             />
         );
     } catch (e) {
-        return context.props.fallback(e);
+        return <div>loading</div>;
     }
 }
 export function is_server() {
@@ -45,14 +45,10 @@ class ErrorBoundary extends Component {
         }
 
         if (this.state.hasError) {
-            return this.props.fallback();
+            return <div>loading</div>;
         }
 
         return this.props.children;
     }
 }
-
-ErrorBoundary.defaultProps = {
-    fallback: () => <h1>请联系客服</h1>,
-};
 export default ErrorBoundary;
