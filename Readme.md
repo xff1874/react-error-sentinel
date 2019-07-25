@@ -15,36 +15,51 @@ static getDerivedStateFromError() 和 componentDidCatch()自动补丁，避免�
 
 ### 使用说明
 
-1. 创建.resrc 配置文件
+1.安装 catch-react-error
 
-```js
-touch.resrc;
+```sh
+nenpm install @music/catch-react-error
 ```
 
-2. 配置.resrc
+2. 使用命令 init,初始化配置文件和模版
 
+```sh
+npx catch-react-error init
 ```
+
+3. 修改.catch-react-error-config.json 和 ErrorBoundary 模版
+
+```json
 {
-    sentinel:{
-        imports:["import sentry from sentry","import log from 'log'","import myerrorcomponent from '$component/myerrorcomponent'"],
-        componentDidCatch:[" sentry.send(error,info)"],
-        errorComponent:myerrorcomponent,
+    "sentinel": {
+        "imports": "import ServerErrorBoundary from '$components/ServerErrorBoundary'",
+        "errorHandleComponent": "ServerErrorBoundary",
+        "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
     },
-    mode:csr,
-    sourceDir:"src"
+    "mode": "csr",
+    "sourceDir": "./src"
 }
-
 ```
 
-3. 使用命令
+-   imports: 添加到文件头部的代码模版
+-   errorHandleComponent: ErrorBoundary 文件名称
+-   filter: 需要添 ErrorBoundary 的文件选择器，支持多个正则表达式
+-   mode: 渲染模式，客户端渲染/服务端渲染
+-   sourceDir: 源代码目录
+
+4. 使用命令 transform 修改代码
 
 ```shell
-rescli --patch
+npx catch-react-error transform
 ```
 
-命令的具体信息查看 rescli -h
+其他命令信息查看
 
-4. todo
+```sh
+npx catch-react-error --help
+```
+
+### todo
 
 1. 扩展配置文件，支持自定义如下
 
@@ -52,24 +67,18 @@ rescli --patch
 {
     sentinel:[
         {
-            imports:["import sentry from sentry","import log from 'log'","import myerrorcomponent from '$component/myerrorcomponent'"],
-            componentDidCatch:[" sentry.send(error,info)"],
-            errorComponent:myerrorcomponent,
-            target:["src/paging/index.js"]
-
+            "imports": "import ServerErrorBoundary from '$components/ServerErrorBoundary'",
+            "errorHandleComponent": "ServerErrorBoundary",
+            "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
         },
          {
-            imports:["import sentry from sentry","import log from 'log'","import myerrorcomponent2 from '$component/myerrorcomponent2'"],
-            componentDidCatch:[" sentry.send(error,info)"],
-            errorComponent:myerrorcomponent2,
-            target:"src/carousel/index.js"
-
+            "imports": "import ServerErrorBoundary2 from '$components/ServerErrorBoundary2'",
+            "errorHandleComponent": "ServerErrorBoundary2",
+            "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
         }
     ]
 }
 
 ```
 
-2. 添加命令初始化配置文件
-
-3. better tip, interaction and ui
+2. better tip, interaction and ui
