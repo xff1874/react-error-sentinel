@@ -175,10 +175,7 @@ function transform(content, originFile) {
             }
         },
     };
-    const babelplugins = [
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-syntax-dynamic-import',
-    ];
+    const babelplugins = ['@babel/plugin-proposal-class-properties'];
     const ast = babel.parse(content, {
         plugins: babelplugins,
         presets: ['@babel/preset-react'],

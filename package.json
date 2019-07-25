@@ -1,6 +1,6 @@
 {
     "name": "@music/catch-react-error",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "catch-react-error is a cli which patch react error boundaries lifecycle easily",
     "main": "./src/catch-react-error.js",
     "bin": {
