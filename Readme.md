@@ -15,7 +15,7 @@ static getDerivedStateFromError() 和 componentDidCatch()自动补丁，避免�
 
 ### 使用说明
 
-1.安装 catch-react-error
+1. 安装 catch-react-error
 
 ```sh
 nenpm install @music/catch-react-error
