@@ -2,7 +2,7 @@
     "sentinel": {
         "imports": "import ErrorBoundary from '$components/ErrorBoundary'",
         "errorHandleComponent": "ErrorBoundary",
-        "filter": ["/src/ig"]
+        "filter": ["/src/App/ig"]
     },
     "mode": "csr",
     "sourceDir": "src"
