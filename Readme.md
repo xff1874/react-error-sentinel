@@ -6,12 +6,12 @@ React Error Sentinel 是一款脚手架
 
 ### 普通的 ErrorBoudary 存在的问题
 
--   1. Event handlers (learn more)
--   2. Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
--   3. Server side rendering
--   4. Errors thrown in the error boundary itself (rather than its children)
+-   Event handlers (learn more)
+-   Asynchronous code (e.g. setTimeout or requestAnimationFrame callbacks)
+-   Server side rendering
+-   Errors thrown in the error boundary itself (rather than its children)
 
-主要是 3 服务端渲染无法`catch`，还有自己本身无法`catch`.对于服务端渲染只能用`try/catch`了。这也是降级方案。
+主要是`3服务端渲染`无法`catch`，还有自己本身无法`catch`.对于服务端渲染只能用`try/catch`了。这也是降级方案。
 
 ### 使用说明
 
