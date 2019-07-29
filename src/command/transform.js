@@ -81,8 +81,10 @@ function startToParseReactFile(file) {
     // 检索符合过滤条件的文件
     const filters = resconfigFile.sentinel.filter;
     const filtersReg = filters.map(utils.convertStrToReg);
-    if (!filtersReg.some(reg => reg.test(file))) {
-        return;
+    if (filters.length) {
+        if (!filtersReg.some(reg => reg.test(file))) {
+            return;
+        }
     }
 
     let fileContent = fs.readFileSync(file, 'utf8');

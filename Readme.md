@@ -41,6 +41,8 @@ npx catch-react-error init
 }
 ```
 
+**options**
+
 | 配置项               | 类型          | 描述                                                                                                | example                                                              |
 | -------------------- | ------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | imports              | string        | 插入到 jsx 文件头部的`ErrorBoundary`组件的名称和路径(可以配合`webpack alias`简化导入路径)           | "import ServerErrorBoundary from '\$components/ServerErrorBoundary'" |
@@ -67,6 +69,19 @@ npx catch-react-error --help
 
 ### example
 
+运行 example 项目
+
+```sh
+cd example
+```
+
+安装依赖项和启动
+
+```sh
+yarn
+yarn start
+```
+
 ### TODO
 
 #### 扩展配置文件，支持多个自定义如下
@@ -77,18 +92,17 @@ npx catch-react-error --help
         {
             "imports": "import ServerErrorBoundary from '$components/ServerErrorBoundary'",
             "errorHandleComponent": "ServerErrorBoundary",
-            "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
+            "filter": ["/src/fold1/ig"]
         },
          {
             "imports": "import ServerErrorBoundary2 from '$components/ServerErrorBoundary2'",
             "errorHandleComponent": "ServerErrorBoundary2",
-            "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
+            "filter": ["/src/fold2/ig"]
         }
     ],
     "mode": "csr",
     "sourceDir": "src"
 }
-
 ```
 
 #### better tip, interaction and ui
