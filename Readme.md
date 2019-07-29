@@ -44,8 +44,8 @@ npx catch-react-error init
 | 配置项               | 类型          | 描述                                                                                                | example                                                              |
 | -------------------- | ------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | imports              | string        | 插入到 jsx 文件头部的`ErrorBoundary`组件的名称和路径(可以配合`webpack alias`简化导入路径)           | "import ServerErrorBoundary from '\$components/ServerErrorBoundary'" |
-| errorHandleComponent | string        | `ErrorBoundary`组件名称，和`imports中的`导入的文件名相同                                            | ServerErrorBoundary                                                  |
-| filter               | Array(regexp) | 需要添 ErrorBoundary 的文件选择器，支持多个正则表达式来通过文件路径，文件名称等来设置需要处理的文件 | ["/src/ig"]                                                          |
+| errorHandleComponent | string        | `ErrorBoundary`组件名称，和`imports`中的导入的文件名相同                                            | ServerErrorBoundary                                                  |
+| filter               | Array(regexp) | 需要添`ErrorBoundary`的文件选择器，支持多个正则表达式来通过文件路径，文件名称等来设置需要处理的文件 | ["/src/ig"]                                                          |
 | mode                 | string        | 渲染模式，客户端渲染/服务端渲染(`csr` or `ssr`)                                                     | ssr                                                                  |
 | sourceDir            | string        | 需要处理的源代码 root 目录                                                                          | src                                                                  |
 
@@ -78,7 +78,9 @@ npx catch-react-error --help
             "errorHandleComponent": "ServerErrorBoundary2",
             "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
         }
-    ]
+    ],
+    "mode": "csr",
+    "sourceDir": "src"
 }
 
 ```
