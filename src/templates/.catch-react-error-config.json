@@ -2,8 +2,8 @@
     "sentinel": {
         "imports": "import ServerErrorBoundary from '$components/ServerErrorBoundary'",
         "errorHandleComponent": "ServerErrorBoundary",
-        "filter": ["/files need wrapped with ServerErrorBoundary/ig"]
+        "filter": ["/src/ig"]
     },
     "mode": "csr",
-    "sourceDir": "./src"
+    "sourceDir": "src"
 }

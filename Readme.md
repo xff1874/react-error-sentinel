@@ -49,6 +49,10 @@ npx catch-react-error init
 | mode                 | string        | 渲染模式，客户端渲染/服务端渲染(`csr` or `ssr`)                                                     | ssr                                                                  |
 | sourceDir            | string        | 需要处理的源代码 root 目录                                                                          | src                                                                  |
 
+> `ErrorBoundary`组件可以基于模版组件来编写和修改，增加自定义的错误日志上传，回退方案等等。
+
+> `ErrorBoundary`组件的路径可以配合 webpack alias 来自由的放置在项目中的任何目录，不必一定要放置在 components 文件夹中
+
 #### 4. 使用命令 transform 修改代码
 
 ```shell
@@ -60,6 +64,8 @@ npx catch-react-error transform
 ```sh
 npx catch-react-error --help
 ```
+
+### example
 
 ### TODO
 

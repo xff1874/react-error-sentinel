@@ -118,12 +118,15 @@ function transform(content, originFile) {
         },
         ReturnStatement(path) {
             const parentFunc = path.getFunctionParent();
-            if (!parentFunc.node.key || parentFunc.node.key.name !== 'render') {
-                return;
-            }
-
             let oldJsx = path.node.argument;
             if (!oldJsx) return;
+            if (
+                (!parentFunc.node.key ||
+                    parentFunc.node.key.name !== 'render') &&
+                oldJsx.type !== 'JSXElement'
+            ) {
+                return;
+            }
 
             if (oldJsx.type === 'JSXElement') {
                 const oldJsxAttrs = oldJsx.openingElement.attributes;
