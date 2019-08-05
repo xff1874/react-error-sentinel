@@ -1,4 +1,4 @@
-// isReactErrorSentinel
+// isCatchReactError
 import ErrorBoundary from '$components/ErrorBoundary';
 import React from 'react';
 import logo from './logo.svg';
@@ -6,7 +6,7 @@ import './App.css';
 
 function App() {
     return (
-        <ErrorBoundary isReactErrorSentinel>
+        <ErrorBoundary isCatchReactError>
             {
                 <div className="App">
                     <header className="App-header">

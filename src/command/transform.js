@@ -14,29 +14,10 @@ const t = require('@babel/types');
 const utils = require('../utils');
 
 let resconfigFile;
-const RES_Attr_Flag = 'isReactErrorSentinel';
-
-function readRootFile(fileName) {
-    const rootJsonFilfe = `${process.cwd()}/${fileName}`;
-    const obj = fs.readJSONSync(rootJsonFilfe, { throws: false });
-    if (!obj) {
-        utils.log(
-            'red',
-            `\n ✖ failure : no such file ${rootJsonFilfe},please check your project`
-        );
-        utils.log(
-            'yellow',
-            `\n ⚠️ prompt : ${chalk.bold.red(
-                'run init command'
-            )} can generate resrc.json templates`
-        );
-        return;
-    }
-    return obj;
-}
+const CRE_Attr_Flag = utils.CRE_Attr_Flag;
 
 function checkProjectReactVersion() {
-    const obj = readRootFile('package.json');
+    const obj = utils.readRootFile('package.json');
     if (!obj) {
         utils.log(
             'red',
@@ -67,15 +48,15 @@ function checkProjectReactVersion() {
     return true;
 }
 
-function readAllFilesRecurisve(dir) {
-    const dirPath = path.resolve(process.cwd(), dir);
-    const filesArray = readdir.readSync(
-        dirPath,
-        ['**.js', '**.jsx'],
-        readdir.ABSOLUTE_PATHS
-    );
-    filesArray.map(startToParseReactFile);
-}
+// function readAllFilesRecurisve(dir) {
+//     const dirPath = path.resolve(process.cwd(), dir);
+//     const filesArray = readdir.readSync(
+//         dirPath,
+//         ['**.js', '**.jsx'],
+//         readdir.ABSOLUTE_PATHS
+//     );
+//     filesArray.map(startToParseReactFile);
+// }
 
 function startToParseReactFile(file) {
     // 检索符合过滤条件的文件
@@ -102,13 +83,13 @@ function transform(content, originFile) {
             exit(path) {
                 const stm = resconfigFile.sentinel.imports;
                 const impstm = template.default.ast(stm);
-                t.addComment(impstm, 'leading', RES_Attr_Flag, true);
+                t.addComment(impstm, 'leading', CRE_Attr_Flag, true);
                 path.node.body.unshift(impstm);
             },
         },
         ImportDeclaration(path, state) {
             const { leadingComments = [] } = path.node;
-            const commentReg = new RegExp(RES_Attr_Flag);
+            const commentReg = new RegExp(CRE_Attr_Flag);
             const findErrorHandleComponent = comment => comment.type === 'CommentLine' &&
                 commentReg.test(comment.value);
 
@@ -133,7 +114,7 @@ function transform(content, originFile) {
             if (oldJsx.type === 'JSXElement') {
                 const oldJsxAttrs = oldJsx.openingElement.attributes;
                 const isReactErrorSentinel = oldJsxAttrs.some(
-                    x => x.name && x.name.name === RES_Attr_Flag
+                    x => x.name && x.name.name === CRE_Attr_Flag
                 );
 
                 if (isReactErrorSentinel) {
@@ -148,7 +129,7 @@ function transform(content, originFile) {
             }
 
             let isReactErrorSentinelAttr = t.jsxAttribute(
-                t.jsxIdentifier(RES_Attr_Flag)
+                t.jsxIdentifier(CRE_Attr_Flag)
             );
 
             let openingElement = t.JSXOpeningElement(
@@ -200,12 +181,13 @@ function transform(content, originFile) {
 }
 
 module.exports = function() {
-    resconfigFile = readRootFile('.catch-react-error-config.json');
+    resconfigFile = utils.readRootFile('.catch-react-error-config.json');
     if (!resconfigFile) {
         return;
     }
 
     if (checkProjectReactVersion()) {
-        readAllFilesRecurisve(resconfigFile.sourceDir);
+        const filesArray = utils.readAllFilesRecurisve(resconfigFile.sourceDir);
+        filesArray.map(startToParseReactFile);
     }
 };
