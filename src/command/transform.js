@@ -1,5 +1,4 @@
 const path = require('path');
-const inquirer = require('inquirer');
 const fs = require('fs-extra');
 const chalk = require('chalk');
 const semver = require('semver');
@@ -10,6 +9,7 @@ const traverse = require('@babel/traverse');
 const generator = require('@babel/generator');
 const prettier = require('prettier');
 const t = require('@babel/types');
+const htmlTags = require('html-tags');
 
 const utils = require('../utils');
 
@@ -97,6 +97,43 @@ function startToParseReactFile(file) {
 }
 
 function transform(content, originFile) {
+    const customComponentVisitor = {
+        JSXElement(path) {
+            const tagName = path.node.openingElement.name.name;
+            if (htmlTags.indexOf(tagName) >= 0) {
+                return;
+            }
+
+            if (tagName === resconfigFile.sentinel.errorHandleComponent) {
+                return;
+            }
+            if (path.parent.openingElement) {
+                if (
+                    path.parent.openingElement.name.name ===
+                    resconfigFile.sentinel.errorHandleComponent
+                ) {
+                    return;
+                }
+            }
+
+            let oldJsx = path.node;
+            let isReactErrorSentinelAttr = t.jsxAttribute(
+                t.jsxIdentifier(RES_Attr_Flag)
+            );
+
+            let openingElement = t.JSXOpeningElement(
+                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent),
+                [isReactErrorSentinelAttr]
+            );
+            let closingElement = t.JSXClosingElement(
+                t.JSXIdentifier(resconfigFile.sentinel.errorHandleComponent)
+            );
+
+            let newJsx = t.JSXElement(openingElement, closingElement, [oldJsx]);
+            path.replaceWith(newJsx);
+        },
+    };
+
     const convertVisitor = {
         Program: {
             exit(path) {
@@ -119,6 +156,7 @@ function transform(content, originFile) {
             }
         },
         ReturnStatement(path) {
+            path.traverse(customComponentVisitor);
             const parentFunc = path.getFunctionParent();
             let oldJsx = path.node.argument;
             if (!oldJsx) return;
@@ -178,6 +216,7 @@ function transform(content, originFile) {
             if (path.parent.body) {
                 path.parent.body.push(newReturnStm);
             }
+            path.traverse(customComponentVisitor);
         },
     };
     const babelplugins = ['@babel/plugin-proposal-class-properties'];
