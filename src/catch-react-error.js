@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const packageJSON = require('../package');
 const init = require('./command/init');
 const transform = require('./command/transform');
+const peek = require('./command/peek');
 
 program.version(packageJSON.version).description(
     chalk.green(`--------------description--------------
@@ -28,5 +29,11 @@ program
     )
     .alias('t')
     .action(transform);
+
+program
+    .command('peek')
+    .description('look for all the transform files')
+    .alias('p')
+    .action(peek);
 
 program.parse(process.argv);
