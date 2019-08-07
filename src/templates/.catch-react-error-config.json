@@ -4,6 +4,7 @@
         "errorHandleComponent": "ServerErrorBoundary",
         "filter": ["/src/ig"]
     },
+    "wrapAllCustomComponent": true,
     "mode": "csr",
     "sourceDir": "src"
 }

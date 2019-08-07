@@ -137,7 +137,9 @@ function transform(content, originFile) {
             }
         },
         ReturnStatement(path) {
-            path.traverse(customComponentVisitor);
+            if (resconfigFile.wrapAllCustomComponent) {
+                path.traverse(customComponentVisitor);
+            }
             const parentFunc = path.getFunctionParent();
             let oldJsx = path.node.argument;
             if (!oldJsx) return;
