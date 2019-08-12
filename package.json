@@ -6,6 +6,9 @@
     "bin": {
         "catch-react-error": "./src/catch-react-error.js"
     },
+    "scripts": {
+        "test": "jest"
+    },
     "repository": {
         "type": "git",
         "url": "https://g.hz.netease.com/NeteaseMusicUI/react-error-sentinel.git"
@@ -25,6 +28,7 @@
         "co-prompt": "^1.0.0",
         "commander": "^2.20.0",
         "compare-versions": "^3.4.0",
+        "eslint-plugin-jest": "^22.15.0",
         "fs-extra": "^8.0.1",
         "html-tags": "^3.0.0",
         "inquirer": "^6.5.0",
@@ -53,6 +57,7 @@
         "eslint-plugin-import": "^2.17.3",
         "eslint-plugin-react": "^7.13.0",
         "husky": "^2.4.1",
+        "jest": "^24.8.0",
         "lint-staged": "^8.2.1",
         "prettier": "^1.18.2"
     },
@@ -71,6 +76,16 @@
         "*.{json,css,less,md}": [
             "prettier --write",
             "git add"
+        ]
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "roots": [
+            "src/test"
+        ],
+        "collectCoverage": true,
+        "collectCoverageFrom": [
+            "!**/example/**"
         ]
     }
 }
