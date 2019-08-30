@@ -22,4 +22,5 @@ module.exports = function() {
         }
     });
     console.log(transformFiles);
+    return transformFiles;
 };

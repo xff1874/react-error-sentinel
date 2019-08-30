@@ -215,7 +215,7 @@ function transform(content, originFile) {
     const prettifiedCode = prettier.format(newCode, { parser: 'babel' });
     // return;
     if (newCode) {
-        fs.writeFile(originFile, prettifiedCode, err => {
+        fs.outputFileSync(originFile, prettifiedCode, err => {
             if (err) throw new Error(`${originFile} write error: ${err}`);
         });
     }

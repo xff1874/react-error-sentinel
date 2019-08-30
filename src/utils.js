@@ -65,7 +65,7 @@ function readRootFile(fileName) {
             'yellow',
             `\n ⚠️  prompt : ${chalk.bold.red(
                 'run init command'
-            )} can generate resrc.json templates`
+            )} can generate catch-react-error.json templates`
         );
         return;
     }

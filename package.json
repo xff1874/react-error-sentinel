@@ -4,7 +4,7 @@
     "description": "catch-react-error is a cli which patch react error boundaries lifecycle easily",
     "main": "./src/catch-react-error.js",
     "bin": {
-        "catch-react-error": "./src/catch-react-error.js"
+        "catch-react-error": "./src/index.js"
     },
     "scripts": {
         "test": "jest"
@@ -81,11 +81,12 @@
     "jest": {
         "testEnvironment": "node",
         "roots": [
-            "src/test"
+            "test"
         ],
         "collectCoverage": true,
         "collectCoverageFrom": [
-            "!**/example/**"
+            "!**/example/**",
+            "!**/fixtures/**"
         ]
     }
 }

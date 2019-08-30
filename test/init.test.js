@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 
-const init = require('../command/init');
+const init = require('../src/command/init');
 
 const tempFolder = path.resolve(__dirname, '../templates');
 
@@ -66,9 +66,6 @@ describe('read and rewrite CRE templates', () => {
                 );
 
                 return Promise.all([readTempComponent(), readpastedComponent()])
-                    .then((x, y) => {
-                        console.log(x);
-                    })
                     .then(() => {
                         fs.remove(
                             `${process.cwd()}/${
