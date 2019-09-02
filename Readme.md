@@ -106,3 +106,22 @@ yarn start
 ```
 
 #### better tip, interaction and ui
+
+### TODO
+
+-   三种思路
+
+    -   一个大而全的脚手架的方案，直接操作源代码，破坏性比较强
+    -   bable-plugin 的方案，通过操作 AST 的方式，使用 ErrorBoundary 包裹
+    -   webpack-loader 的思路，在打包阶段用 JS 的方式处理代码
+
+-   区分渲染模式(csr、ssr) DONE
+
+-   wrapper 方式的区别：
+    -   component render 函数的包装
+        -   对以后的 functional component 无能为力，因为没有 render 函数，而且没有任何方法可以判断一个函数是 pure JS function or functional component
+        -   对只有两层嵌套的 tree 结构没有效果，因为 children component 报错相当于直接传导到 top level parent component
+        -   如果遇到 cloneElement 则会产生传递 props 错层丢失的问题，但是可以通过 ErrorBoundary 组件的逻辑来传递
+    -   对 custom component 包装
+        -   提供两个维度一个是所有的 custom component 都将被包裹，另一种是提供自定义的组件名称 array
+        -   颗粒度较小，极小概率会遇到不能完全包裹的情况

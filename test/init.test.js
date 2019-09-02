@@ -80,3 +80,7 @@ describe('read and rewrite CRE templates', () => {
             .catch(e => expect(e).toMatch('error'));
     });
 });
+
+afterAll(() => {
+    fs.removeSync(`${process.cwd()}/.catch-react-error-config.json`);
+});

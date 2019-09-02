@@ -1,23 +1,30 @@
 /* eslint-disable no-undef */
 const path = require('path');
-const fs = require('fs-extra');
+const fsExtra = require('fs-extra');
 
-const init = require('../src/command/init');
+const peek = require('../src/command/peek');
 
-const tempFolder = path.resolve(__dirname, '../templates');
+const { join } = path;
 
-describe('read and rewrite CRE templates', () => {
-    const input = {
-        mode: 'SSR',
-        sourceDir: 'root/src',
-    };
+const fixturesDir = join(__dirname, 'fixtures');
 
-    test('read template config', () => init
-        .readTempCRErc(input)
-        .then(({ resrcObj, inputs }) => {
-            expect(resrcObj.mode).toBe('SSR');
-            expect(resrcObj.sourceDir).toBe('root/src');
-            expect(inputs).toEqual(input);
-        })
-        .catch(e => expect(e).toMatch('error')));
+describe('peek all transformed file list', () => {
+    const fixtureDir = join(fixturesDir, 'peek');
+    const creConfig = join(fixtureDir, '.catch-react-error-config.json');
+
+    const expectedList = [
+        '/test/fixtures/peek/test-a.js',
+        '/test/fixtures/peek/test-b.js',
+    ];
+
+    test('peek transformed file list', () => fsExtra
+        .copy(creConfig, `${process.cwd()}/.catch-react-error-config.json`)
+        .then(peek)
+        .then(fileList => {
+            expect(fileList).toEqual(expectedList);
+        }));
+});
+
+afterAll(() => {
+    fsExtra.removeSync(`${process.cwd()}/.catch-react-error-config.json`);
 });
