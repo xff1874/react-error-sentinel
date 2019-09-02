@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 const path = require('path');
 const fs = require('fs-extra');
+const fsNode = require('fs');
 
 const init = require('../src/command/init');
 
-const tempFolder = path.resolve(__dirname, '../templates');
+const tempFolder = path.resolve(__dirname, 'src/templates');
 
 describe('read and rewrite CRE templates', () => {
     const input = {
@@ -53,34 +54,14 @@ describe('read and rewrite CRE templates', () => {
             mode: 'SSR',
             componentFolder: 'test_dir',
         };
-        return init
-            .copyErrorComponent(inputs)
-            .then(() => {
-                const readTempComponent = () => fs.readJSON(
-                    `${tempFolder}/${inputs.mode}/ErrorBoundary.js`
-                );
-                const readpastedComponent = () => fs.readJSON(
-                    `${process.cwd()}/${
-                        inputs.componentFolder
-                    }/ErrorBoundary.js`
-                );
-
-                return Promise.all([readTempComponent(), readpastedComponent()])
-                    .then(() => {
-                        fs.remove(
-                            `${process.cwd()}/${
-                                inputs.componentFolder
-                            }/ErrorBoundary.js`
-                        );
-                    })
-                    .catch(e => {
-                        console.log('eeeee');
-                    });
-            })
-            .catch(e => expect(e).toMatch('error'));
+        return init.copyErrorComponent(inputs).catch(e => {
+            console.log(e);
+            expect(e).toBeInstanceOf(Error);
+        });
     });
 });
 
 afterAll(() => {
     fs.removeSync(`${process.cwd()}/.catch-react-error-config.json`);
+    fs.removeSync(`${process.cwd()}/test_dir`);
 });
