@@ -1,0 +1,10 @@
+{
+    "sentinel": {
+        "imports": "import ServerErrorBoundary from '$components/ServerErrorBoundary'",
+        "errorHandleComponent": "ServerErrorBoundary",
+        "filter": ["/src/ig"]
+    },
+    "wrapAllCustomComponent": true,
+    "mode": "csr",
+    "sourceDir": "src"
+}

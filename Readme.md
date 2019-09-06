@@ -82,7 +82,7 @@ yarn
 yarn start
 ```
 
-### TODO
+### TODO 1
 
 #### 扩展配置文件，支持多个自定义如下
 
@@ -105,9 +105,7 @@ yarn start
 }
 ```
 
-#### better tip, interaction and ui
-
-### TODO
+### TODO 2
 
 -   三种思路
 

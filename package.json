@@ -2,12 +2,15 @@
     "name": "@music/catch-react-error",
     "version": "0.2.5",
     "description": "catch-react-error is a cli which patch react error boundaries lifecycle easily",
-    "main": "./src/catch-react-error.js",
+    "main": "./lib/index.js",
     "bin": {
-        "catch-react-error": "./src/index.js"
+        "catch-react-error": "./lib/index.js"
     },
     "scripts": {
-        "test": "jest"
+        "test": "jest",
+        "build": "npm run transform && npm run copy",
+        "transform": "npx babel src --out-dir lib --ignore 'src/templates/*/*.js'",
+        "copy": "node build/copy.js"
     },
     "repository": {
         "type": "git",
@@ -40,12 +43,13 @@
         "yargs": "^13.3.0"
     },
     "devDependencies": {
-        "@babel/cli": "^7.4.4",
+        "@babel/cli": "^7.5.5",
         "@babel/core": "^7.4.5",
         "@babel/node": "^7.4.5",
         "@babel/plugin-proposal-class-properties": "^7.4.4",
         "@babel/plugin-syntax-dynamic-import": "^7.2.0",
         "@babel/plugin-transform-arrow-functions": "^7.2.0",
+        "@babel/preset-env": "^7.5.5",
         "@babel/preset-react": "^7.0.0",
         "@commitlint/cli": "^8.0.0",
         "@commitlint/config-conventional": "^8.0.0",
@@ -76,6 +80,9 @@
         "*.{json,css,less,md}": [
             "prettier --write",
             "git add"
+        ],
+        "ignore": [
+            "**/lib/*.js"
         ]
     },
     "jest": {
