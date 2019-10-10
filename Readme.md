@@ -123,3 +123,5 @@ yarn start
     -   对 custom component 包装
         -   提供两个维度一个是所有的 custom component 都将被包裹，另一种是提供自定义的组件名称 array
         -   颗粒度较小，极小概率会遇到不能完全包裹的情况
+        
+-   config的命名改一下 sentinal,imports
