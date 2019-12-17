@@ -1,25 +1,19 @@
-//isCatchReactError
-import ServerErrorBoundary from '$components/ServerErrorBoundary';
-import React, { Component } from 'react';
-const TEXT = 'SOME THING';
+import React, { Component } from "react";
+const TEXT = "SOME THING";
 
 class App extends Component {
-    render() {
-        return (
-            <ServerErrorBoundary
-                isCatchReactError
-            >{`HI, ${TEXT}`}</ServerErrorBoundary>
-        );
-    }
+  render() {
+    return (
+      `HI, ${TEXT}`
+    );
+  }
 }
 
 export class Label extends Component {
-    render() {
-        return (
-            <ServerErrorBoundary isCatchReactError>
-                {<label>some thing</label>}
-            </ServerErrorBoundary>
-        );
-    }
+  render() {
+    return (
+      <label>some thing</label>
+    );
+  }
 }
 export default App;
