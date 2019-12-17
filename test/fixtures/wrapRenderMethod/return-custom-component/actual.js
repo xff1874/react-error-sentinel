@@ -4,14 +4,10 @@ class App extends Component {
 
   render() {
     return (
-      <Button />
+      <CustomComponent />
     );
   }
 }
 
-export const Button = content => {
-  return (
-    <button>content</button>
-  );
-};
+
 export default App;
